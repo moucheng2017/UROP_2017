@@ -1,3 +1,4 @@
+% This script is only for finding the ideal errors of cuttings
 % input 1:d1, first depth of PSI, unit: mm;
 % input 2:d2, last depth of PSI, unit: mm;
 % output:err, error of angle, unit: radians;

@@ -1,18 +1,36 @@
+% This is the script for the data analysis of 2017 UROP PSI accuracy
+% project at MSK lab@Imperial College London, it can calculate the error
+% angles between target plane and real cutting plane; flatness of real
+% cutting plane, it also plot the deviations map of cutting surface for
+% local flatness visualization. 
+% 
+% The project script needs the support from several functions:
+% angle_error,flatness,rgb,stlread,stlreadascii,stlreadbinary
+
 clear all
-n=96;%number of blocks in total
+%% reading data
+prompt1 = 'how many blocks do you have here?\n';
+n =input(prompt1);%number of avaliable blocks in total
+
 stl_files = dir('*.stl');
 stl_files = stl_files(~[stl_files.isdir]); 
 stl_names = {stl_files.name};
 
 numfiles=length(stl_names);
 r=rem(numfiles,4);
+
 if r ~= 0
-    error('each block should have 4 files, some files are missing.')
+    error('ach block should have 4 files, some files are missing.')
 end
 
+if numfiles ~= 4*n
+    error('The number of blocks is different from blocks in the folder.')
+end
+%% Main code
+disp('Calculating...');
 BlockPartName = {};
-ErrorAngle = [];
-flat = [];
+ErrorAngle = []; %error angles results
+flat = []; %flatness results
 
 for i=1:n
     target1 = sprintf('%d_t_up.stl',i);%target up

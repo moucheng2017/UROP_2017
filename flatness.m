@@ -1,17 +1,28 @@
 function f = flatness(plane)
-%%
-%white:0-0.02mm
-%cyan:0.02-0.04mm
-%dodgerblue:0.04-0.06mm
-%blue:0.06-0.08mm
-%yellow:0.08-0.1mm
-%orange:0.1-0.26mm
-%green:0.26-0.5mm
-%red:0.5-0.76mm
-%purple:0.76-1mm
-%black:1-1.5mm
-%black:>1.5mm
-%%
+% FLATNESS  Plot the deviations map to evaluate the flatness of cutting surfaces.
+%   plane = target_plane from the block with PSI before cutting
+%   f = the difference between the maximum deviation and minimum deviation
+%   in the point clouds of surface
+%
+%   The function is based on comparing the real positions of points with 
+%   the estimated positions of points from linear regression
+%
+%   The colours represent different divations values:
+%   white:0-0.02mm
+%   cyan:0.02-0.04mm
+%   dodgerblue:0.04-0.06mm
+%   blue:0.06-0.08mm
+%   yellow:0.08-0.1mm
+%   orange:0.1-0.26mm
+%   green:0.26-0.5mm
+%   red:0.5-0.76mm
+%   purple:0.76-1mm
+%   black:1-1.5mm
+%   black:>1.5mm
+%
+%   This function is for the 2017 UROP PSI project at MSK lab@Imperial College
+
+%% reading data & calculation of deviations
 [f1,v1]=stlread(plane);
 sum_sur1=sum(v1);
 no_rows=size(v1,1);

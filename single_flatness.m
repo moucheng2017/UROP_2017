@@ -1,4 +1,6 @@
-%%
+% This script is only used in the devlopment for PSI_project script, not
+% the final script for the project
+%
 %white:0-0.02mm
 %cyan:0.02-0.04mm
 %dodgerblue:0.04-0.06mm

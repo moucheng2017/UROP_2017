@@ -1,4 +1,5 @@
-%% 
+% This script is only used in the devlopment for PSI_project script, not
+% the final script for the project
 [f1,v1]=stlread('3_c_bo.stl');
 [f2,v2]=stlread('3_t_bo.stl');
 no_rows1=size(v1,1);
