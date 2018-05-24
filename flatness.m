@@ -1,4 +1,4 @@
-function f = flatness(plane)
+function [f,index_90] = flatness(plane)
 % FLATNESS  Plot the deviations map to evaluate the flatness of cutting surfaces.
 %   plane = target_plane from the block with PSI before cutting
 %   f = the difference between the maximum deviation and minimum deviation
@@ -54,7 +54,7 @@ e_min=min(e);
 f=e_max-e_min;
 
 %% plot:
-figure
+
 x1=[];y1=[];z1=[];x2=[];y2=[];z2=[];x3=[];y3=[];z3=[];x4=[];y4=[];z4=[];x5=[];y5=[];z5=[];x6=[];y6=[];z6=[];
 x7=[];y7=[];z7=[];x8=[];y8=[];z8=[];x9=[];y9=[];z9=[];x10=[];y10=[];z10=[];x11=[];y11=[];z11=[];x12=[];y12=[];z12=[];
 x13=[];y13=[];z13=[];x14=[];y14=[];z14=[];x15=[];y15=[];z15=[];x16=[];y16=[];z16=[];x17=[];y17=[];z17=[];x18=[];y18=[];z18=[];
@@ -298,7 +298,8 @@ for i=1:no
         z56(end+1)=z(i);
     end 
 end
-
+%{
+figure
 scatter3(x1',y1',z1',1,rgb('white'),'filled');
 hold on
 scatter3(x2',y2',z2',1,rgb('Cyan'),'filled');
@@ -362,6 +363,8 @@ plane=regexprep(plane,'[_,c,s,t,l,.]','');%remove redundant characters
 plane = upper(plane);
 title(plane);
 view([0 90])
+saveas()
+%}
 %% Distribution 
 xx={};
 xx=[xx,{x1},{x2},{x3},{x4},{x5},{x6},{x7},{x8},{x9},{x10},{x11},{x12},{x13},{x14},{x15},{x16},{x17},{x18},{x19},{20},...
@@ -382,7 +385,7 @@ for i=2:length(pp)+1
     pp_acc(i)=pp_t+pp(i-1);
     pp_t=pp_acc(i);
 end
-
+%{
 figure 
 x_axis=0:0.02:0.3;
 y_axis=pp_acc(1:16);
@@ -392,3 +395,21 @@ xticklabels({'0','0.02','0.04','0.06','0.08','0.1','0.12','0.14','0.16','0.18','
 title(plane);
 xlabel({'deviations','(mm)'});
 ylabel({'accumulations','(%)'});
+%}
+%%
+index_below_90 = 1;
+index_above_90 = 2;
+for jj=1:length(pp_acc)
+    if (pp_acc(jj)<90)
+       index_below_90 = jj-1;
+       index_above_90 = jj;
+    else
+        index_above_90 = jj;
+        index_below_90 = jj-1;
+        break
+    end
+end
+%fprintf('index_above_90 %d  \n',index_above_90);
+%fprintf('index_below_90 %d  \n',index_below_90);
+index_90 = index_above_90-((index_above_90-index_below_90)/(pp_acc(index_above_90)-pp_acc(index_below_90)))*(pp_acc(index_above_90)-90);
+index_90 = index_90*0.02;

@@ -13,7 +13,7 @@
 %black:1-1.5mm
 %black:>1.5mm
 %%
-[f1,v1]=stlread('3_c_up.stl');
+[f1,v1]=stlread('17_c_up.stl');
 sum_sur1=sum(v1);
 no_rows=size(v1,1);
 
@@ -24,7 +24,7 @@ A=[v1(:,1)-centre1(1) v1(:,2)-centre1(2) v1(:,3)-centre1(3)];
 x=A(:,1);
 y=A(:,2);
 z=A(:,3);
-no=length(x);
+no=length(x);%amount of points consists of a plane 
 
 y_square_sum=sum(y.*y);
 x_square_sum=sum(x.*x);
@@ -46,7 +46,7 @@ fprintf('maximum: %d mm \n',e_max);
 fprintf('minimum: %d mm \n',e_min);
 fprintf('flatness: %d mm \n\n',error);
 %% plot:
-figure
+f1 = figure
 x1=[];y1=[];z1=[];x2=[];y2=[];z2=[];x3=[];y3=[];z3=[];x4=[];y4=[];z4=[];x5=[];y5=[];z5=[];x6=[];y6=[];z6=[];
 x7=[];y7=[];z7=[];x8=[];y8=[];z8=[];x9=[];y9=[];z9=[];x10=[];y10=[];z10=[];x11=[];y11=[];z11=[];x12=[];y12=[];z12=[];
 x13=[];y13=[];z13=[];x14=[];y14=[];z14=[];x15=[];y15=[];z15=[];x16=[];y16=[];z16=[];x17=[];y17=[];z17=[];x18=[];y18=[];z18=[];
@@ -358,6 +358,7 @@ xx=[xx,{x1},{x2},{x3},{x4},{x5},{x6},{x7},{x8},{x9},{x10},{x11},{x12},{x13},{x14
     {x41},{x42},{x43},{x44},{x45},{x46},{x47},{x48},{x49},{x50},{x51},{x52},{x53},{x54},{x55},{x56}];
 
 pp=zeros(56,1);
+% check the percentage of each class of distribution in the whole plane 
 for i=1:length(xx)
     l=length(xx{i});
     digits(2);
@@ -372,13 +373,35 @@ for i=2:length(pp)+1
     pp_t=pp_acc(i);
 end
 
-figure 
+f2 = figure 
 x_axis=0:0.02:0.3;
 y_axis=pp_acc(1:16);
+%y_axis = 0:0.1:0.9;
 plot(x_axis,y_axis,'-o');
 xticks([0 0.02 0.04 0.06 0.08 0.1 0.12 0.14 0.16 0.18 0.2 0.22 0.24 0.26 0.28 0.3]);
 xticklabels({'0','0.02','0.04','0.06','0.08','0.1','0.12','0.14','0.16','0.18','0.2','0.22','0.24','0.26','0.28','0.3'});
 title('accumulations of percentages');
 xlabel({'deviations','(mm)'});
 ylabel({'accumulations','(%)'});
-disp('end');
+%%
+index_below_90 = 1;
+index_above_90 = 2;
+for jj=1:length(pp_acc)
+    if (pp_acc(jj)<90)
+       index_below_90 = jj-1;
+       index_above_90 = jj;
+    else
+        index_above_90 = jj;
+        index_below_90 = jj-1;
+        break
+    end
+end
+
+%fprintf('index_above_90 %d  \n',index_above_90);
+%fprintf('index_below_90 %d  \n',index_below_90);
+
+index_90 = index_above_90-((index_above_90-index_below_90)/(pp_acc(index_above_90)-pp_acc(index_below_90)))*(pp_acc(index_above_90)-90);
+index_90 = index_90*0.02;
+%fprintf('90: %d  \n', index_90)
+
+disp('end')
